@@ -25,6 +25,7 @@ function createBadge(score, maxScore, branch) {
     })
 
     execSync(`git checkout ${branch} || git checkout -b ${branch}`)
+    execSync('git fetch')
     if (!fs.existsSync('.github/badges')) {
         fs.mkdirSync('.github/badges', { recursive: true })
     }
