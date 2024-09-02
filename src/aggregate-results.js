@@ -36,12 +36,6 @@ function AggregateResults(runnerResults) {
 
     table.push(["Total: ", `${totalTestScores}`, `${totalMaxScores}`]);
 
-    core.setOutput('results', JSON.stringify({
-      totalScore: totalTestScores,
-      maxScore: totalMaxScores,
-      formattedPoints: totalTestScores + "/" + totalMaxScores,
-    }));
-
     console.log(table.toString());
   } catch (error) {
     throw new Error(error.message);
