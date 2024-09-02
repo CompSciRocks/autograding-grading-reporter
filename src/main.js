@@ -15,13 +15,37 @@ try {
   ConsoleResults(runnerResults);
   NotifyClassroom(runnerResults);
 
-  console.log(runnerResults)
 
   if (runnerResults.some((r) => r.results.status === "fail")) {
     core.setFailed("Some tests failed.");
   } else if (runnerResults.some((r) => r.results.status === 'error')) {
     core.setFailed("Some tests errored.");
   }
+
+  let result = {
+    tests: [],
+    pointsPossible: 0,
+    pointsAwarded: 0,
+  }
+
+  runnerResults.forEach(({ results }) => {
+    results.tests.forEach((test) => {
+      result.tests.push({
+        name: test.name,
+        status: test.status,
+        message: test.message,
+        line_no: test.line_no,
+        test_code: test.test_code,
+      });
+    });
+    result.pointsPossible += results.max_score;
+    results.tests.forEach((test) => {
+      result.pointsAwarded += test.score;
+    });
+  });
+
+  core.setOutput('results', JSON.stringify(result));
+
 } catch (error) {
   const input = core.getInput("runners");
   const pattern = /^([a-zA-Z0-9]+,)*[a-zA-Z0-9]+$/
