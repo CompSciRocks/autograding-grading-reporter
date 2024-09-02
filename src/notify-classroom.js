@@ -1,6 +1,5 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
-const badges = require("./badge");
 
 exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
   // combine max score and total score from each {runner, results} pair
@@ -18,8 +17,6 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
     },
     { totalPoints: 0, maxPoints: 0 }
   );
-
-  badges.createBadge(totalPoints, maxPoints, 'badges');
 
   if (!maxPoints) return;
 
