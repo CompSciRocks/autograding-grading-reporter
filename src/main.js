@@ -36,8 +36,8 @@ try {
     });
   });
 
-  if (isNaN(result.pointsPossible)) {
-    result.pointsPossible = 0;
+  if (isNaN(result.pointsAwarded)) {
+    result.pointsAwarded = 0;
   }
 
   core.exportVariable('POINTS_STRING', `${result.pointsAwarded}/${result.pointsPossible}`);
