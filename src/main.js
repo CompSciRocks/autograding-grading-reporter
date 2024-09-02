@@ -36,7 +36,7 @@ try {
     });
   });
 
-  core.setVariable('POINTS_STRING', `${result.pointsAwarded}/${result.pointsPossible}`);
+  core.exportVariable('POINTS_STRING', `${result.pointsAwarded}/${result.pointsPossible}`);
 
 } catch (error) {
   const input = core.getInput("runners");
