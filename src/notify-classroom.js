@@ -17,6 +17,13 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
     },
     { totalPoints: 0, maxPoints: 0 }
   );
+
+  core.setOutput("results", JSON.stringify({
+    totalPoints: totalPoints,
+    maxPoints: maxPoints,
+    pointsString: `${totalPoints}/${maxPoints}`
+  }));
+
   if (!maxPoints) return;
 
   // Our action will need to API access the repository so we require a token

@@ -1,5 +1,5 @@
 name: "GitHub Classroom Autograding Results handler"
-description: "Integrate your CS class with GitHub using GitHub Classroom"
+description: "Tweaked vesion of results handler that outputs so subsequent steps have access to results. Integrate your CS class with GitHub using GitHub Classroom"
 inputs:
   token:
     description: >
@@ -9,8 +9,12 @@ inputs:
       Note that the token will be accessible to all repository collaborators.
     default: ${{ github.token }}
   runners:
-    description: 'Comma-separated list of step ids'
+    description: "Comma-separated list of step ids"
     required: true
+
+outputs:
+  results:
+    description: "The results of the autograding run"
 
 runs:
   using: "node20"
