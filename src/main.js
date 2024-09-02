@@ -22,6 +22,7 @@ try {
     core.setFailed("Some tests errored.");
   }
 
+
   let result = {
     tests: [],
     pointsPossible: 0,
@@ -45,6 +46,7 @@ try {
   });
 
   core.setOutput('result', Buffer.from(JSON.stringify(result)).toString('base64'));
+  core.setVariable('POINTS_STRING', `${result.pointsAwarded}/${result.pointsPossible}`);
 
 } catch (error) {
   const input = core.getInput("runners");
