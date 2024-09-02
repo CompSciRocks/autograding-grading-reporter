@@ -44,7 +44,7 @@ try {
     });
   });
 
-  core.setOutput('result', JSON.stringify(result));
+  core.setOutput('result', Buffer.from(JSON.stringify(result).toString('base64')));
 
 } catch (error) {
   const input = core.getInput("runners");
