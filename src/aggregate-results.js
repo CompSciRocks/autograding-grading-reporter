@@ -1,6 +1,7 @@
 const { COLORS } = require("./colors");
 const Table = require("cli-table3");
 const { getTotalMaxScore, getTestWeight, getTestScore, totalPercentageReducer, getMaxScoreForTest } = require("./helpers/test-helpers");
+const { core } = require("@actions/core");
 
 function getTableTotals(runnerResults, pushToTable) {
   const totalMaxScore = getTotalMaxScore(runnerResults);
@@ -34,7 +35,13 @@ function AggregateResults(runnerResults) {
     const totalMaxScores = totals.reduce((acc, curr) => acc + curr.maxScore, 0)
 
     table.push(["Total: ", `${totalTestScores}`, `${totalMaxScores}`]);
-    
+
+    core.setOutput('results', JSON.stringify({
+      totalScore: totalTestScores,
+      maxScore: totalMaxScores,
+      formattedPoints: totalTestScores + "/" + totalMaxScores,
+    }));
+
     console.log(table.toString());
   } catch (error) {
     throw new Error(error.message);

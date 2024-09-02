@@ -1,13 +1,13 @@
-const {COLORS} = require('./colors')
-const {AggregateResults} = require('./aggregate-results')
-const {getTestScore, getMaxScoreForTest} = require('./helpers/test-helpers')
+const { COLORS } = require('./colors')
+const { AggregateResults } = require('./aggregate-results')
+const { getTestScore, getMaxScoreForTest } = require('./helpers/test-helpers')
 
 exports.ConsoleResults = function ConsoleResults(runnerResults) {
   try {
     let grandTotalPassedTests = 0
     let grandTotalTests = 0
 
-    runnerResults.forEach(({runner, results}, index) => {
+    runnerResults.forEach(({ runner, results }, index) => {
       // Fun transition to new runner
       const maxScore = getMaxScoreForTest(results)
       // const weight = getTestWeight(maxScore, totalMaxScore);
@@ -59,6 +59,7 @@ exports.ConsoleResults = function ConsoleResults(runnerResults) {
     console.log(
       `${COLORS.cyan}🏆 Grand total tests passed: ${grandTotalPassedTests}/${grandTotalTests}${COLORS.reset}\n`,
     )
+
   } catch (error) {
     throw new Error(error.message)
   }
