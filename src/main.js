@@ -44,7 +44,7 @@ try {
     });
   });
 
-  core.setOutput('results', JSON.stringify(result));
+  core.setOutput('result', JSON.stringify(result));
 
 } catch (error) {
   const input = core.getInput("runners");
