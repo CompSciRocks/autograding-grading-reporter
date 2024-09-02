@@ -1,5 +1,6 @@
 const { makeBadge, ValidationError } = require('badge-maker')
 const { execSync } = require('child_process')
+const fs = require('fs')
 
 function createBadge(score, maxScore, branch) {
     branch = branch || 'badge'
@@ -24,7 +25,10 @@ function createBadge(score, maxScore, branch) {
     })
 
     execSync(`git checkout ${branch} || git checkout -b ${branch}`)
-    execSync(`echo '${svg}' > ./.github/badges/badge.svg`)
+    if (!fs.existsSync('.github/badges')) {
+        fs.mkdirSync('.github/badges', { recursive: true })
+    }
+    fs.writeFileSync('.github/badges/badge.svg', svg)
     execSync('echo config --local user.email "actions@github.com"')
     execSync('echo config --local user.name "GitHub Action"')
     execSync(`git add .github/badges/badge.svg`)
