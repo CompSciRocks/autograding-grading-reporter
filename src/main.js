@@ -30,22 +30,12 @@ try {
   }
 
   runnerResults.forEach(({ results }) => {
-    results.tests.forEach((test) => {
-      result.tests.push({
-        name: test.name,
-        status: test.status,
-        message: test.message,
-        line_no: test.line_no,
-        test_code: test.test_code,
-      });
-    });
     result.pointsPossible += results.max_score;
     results.tests.forEach((test) => {
       result.pointsAwarded += test.score;
     });
   });
 
-  core.setOutput('result', Buffer.from(JSON.stringify(result)).toString('base64'));
   core.setVariable('POINTS_STRING', `${result.pointsAwarded}/${result.pointsPossible}`);
 
 } catch (error) {

@@ -11,9 +11,6 @@ inputs:
   runners:
     description: "Comma-separated list of step ids"
     required: true
-outputs:
-  result:
-    description: "Results of the autograding run"
 runs:
   using: "node20"
   main: "dist/main.js"
