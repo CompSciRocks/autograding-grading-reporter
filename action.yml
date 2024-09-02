@@ -12,7 +12,7 @@ inputs:
     description: "Comma-separated list of step ids"
     required: true
 outputs:
-  testInfo:
+  result:
     description: "Results of the autograding run"
 runs:
   using: "node20"
