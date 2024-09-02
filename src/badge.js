@@ -24,14 +24,15 @@ function createBadge(score, maxScore, branch) {
         color: color
     })
 
+    execSync('echo config --local user.email "actions@github.com"')
+    execSync('echo config --local user.name "GitHub Action"')
+
     execSync(`git checkout ${branch} || git checkout -b ${branch}`)
-    execSync('git fetch')
+    execSync('git pull')
     if (!fs.existsSync('.github/badges')) {
         fs.mkdirSync('.github/badges', { recursive: true })
     }
     fs.writeFileSync('.github/badges/badge.svg', svg)
-    execSync('echo config --local user.email "actions@github.com"')
-    execSync('echo config --local user.name "GitHub Action"')
     execSync(`git add .github/badges/badge.svg`)
     execSync('git commit -m "Add/Update Badge" || exit 0')
     execSync(`git push origin ${branch}`)
