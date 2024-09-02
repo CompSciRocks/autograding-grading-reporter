@@ -9,9 +9,9 @@ try {
     .map((runner) => {
       const encodedResults = process.env[`${runner.trim().toUpperCase()}_RESULTS`];
       const json = Buffer.from(encodedResults, "base64").toString("utf-8");
+      console.info(json)
       return { runner, results: JSON.parse(json) };
     });
-
 
   ConsoleResults(runnerResults);
   NotifyClassroom(runnerResults);
