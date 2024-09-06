@@ -37,6 +37,11 @@ function AggregateResults(runnerResults) {
     table.push(["Total: ", `${totalTestScores}`, `${totalMaxScores}`]);
 
     console.log(table.toString());
+
+    if (totalMaxScores > 0) {
+      core.setOutput('Points', `${totalTestScores}/${totalMaxScores}`);
+    }
+
   } catch (error) {
     throw new Error(error.message);
   }

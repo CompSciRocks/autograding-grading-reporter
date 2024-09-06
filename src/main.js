@@ -22,26 +22,6 @@ try {
     core.setFailed("Some tests errored.");
   }
 
-
-  let result = {
-    tests: [],
-    pointsPossible: 0,
-    pointsAwarded: 0,
-  }
-
-  runnerResults.forEach(({ results }) => {
-    result.pointsPossible += results.max_score;
-    results.tests.forEach((test) => {
-      result.pointsAwarded += test.score;
-    });
-  });
-
-  if (isNaN(result.pointsAwarded)) {
-    result.pointsAwarded = 0;
-  }
-
-  core.exportVariable('POINTS_STRING', `${result.pointsAwarded}/${result.pointsPossible}`);
-
 } catch (error) {
   const input = core.getInput("runners");
   const pattern = /^([a-zA-Z0-9]+,)*[a-zA-Z0-9]+$/
