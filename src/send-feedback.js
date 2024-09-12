@@ -50,7 +50,7 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
     let markdownText = '';
 
     markdownText = `# Feedback from autograding\n\n`;
-    markdownText += 'Date: ' + new Date().toLocaleString() + '\n\n';
+    markdownText += 'Date: ' + new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + '\n\n';
 
     if (maxScore > 0) {
         // No button if no max score
@@ -120,7 +120,7 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
             repo,
             issue_number: issueNumber,
             body: markdownText,
-            title: "Autograding Feedback: " + new Date().toLocaleString()
+            title: "Autograding Feedback: " + new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' })
         });
     } catch (error) {
         core.setFailed("Failed to create comment: " + error.message);
