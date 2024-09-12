@@ -32,7 +32,7 @@ jobs:
           package-manager: npm
       - name: Create release
         run: |
-          gh release delete ${{ env.CI_REF_NAME }} -y
+          gh release delete ${{ env.CI_REF_NAME }} -y || echo 'No release to delete'
           gh release create ${{ env.CI_REF_NAME }} -t ${{ env.CI_REF_NAME }} -n "Release ${{ env.CI_REF_NAME }}"
         env:
           GH_TOKEN: ${{ github.token }}
