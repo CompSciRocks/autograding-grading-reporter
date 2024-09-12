@@ -15,7 +15,6 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
 
     if (shouldSend === "never") {
         // Skipping feedback
-        console.info('Skipping feedback');
         return;
     }
 
@@ -24,14 +23,17 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
     runnerResults.forEach(({ runner, results }) => {
         if (results.markdown && results.markdown.length > 0) {
             // Have to base64 decode the results
+
+            let testMarkdown = '-----\n\n';
+            testMarkdown += '### Test: ' + results.tests[0].name + '\n\n';
             let decoded = Buffer.from(results.markdown, 'base64').toString('utf-8');
-            markdownList.push(decoded);
+            testMarkdown += decoded;
+            markdownList.push(testMarkdown);
         }
     });
 
     if (shouldSend === 'when_available' && markdownList.length === 0) {
         // No feedback from the runners, settings say to skip
-        console.info('No feedback available, skipping feedback');
         return;
     }
 
@@ -68,7 +70,6 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
         markdownText += markdownList.join('\n\n');
     }
 
-    console.info(markdownText);
 
     const token = process.env.GITHUB_TOKEN || core.getInput("token");
     if (!token || token === "") {
