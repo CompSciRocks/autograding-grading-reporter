@@ -52,8 +52,7 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
 
     let markdownText = '';
 
-    markdownText = `# Feedback from autograding\n\n`;
-    markdownText += 'Date: ' + new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + '\n\n';
+    markdownText = '## Feedback from autograding: ' + new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + '\n\n';
 
     if (maxScore > 0) {
         // No button if no max score
