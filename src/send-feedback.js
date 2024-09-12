@@ -100,11 +100,12 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
     });
 
     let feedbackPR = null;
-
+    let feedbackNumber = 0;
     for (let i = 0; i < pullRequests.length; i++) {
         const pr = pullRequests[i];
         if (pr.title === "Feedback") {
             feedbackPR = pr;
+            feedbackNumber = pr.number;
             break;
         }
     }
@@ -112,38 +113,53 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
     if (!feedbackPR) {
         // Create the PR and get the id
 
-        // Create the feedback branch if it doesn't exist
-        try {
-            await octokit.rest.git.createRef({
-                owner,
-                repo,
-                ref: 'refs/heads/feedback',
-                sha: 'main'
-            });
-        } catch (error) {
-            core.setFailed("Failed to create branch: " + error.message);
-        }
-
-        const { data: newPR } = await octokit.rest.pulls.create({
-            owner,
-            repo,
+        await octokit.createPullRequest({
+            owner: owner,
+            repo: repo,
             title: 'Feedback',
+            body: 'This pull request is a place for you and your teacher to discuss your code. **Do not close or merge this pull request.**',
             head: 'feedback',
             base: 'main',
-            body: 'This pull request is a place for you and your teacher to discuss your code. **Do not close or merge this pull request.**',
-        });
+            update: true,
+            forceFork: true
+        }).then(pr => {
+            feedbackPR = pr;
+            feedbackNumber = pr.data.number;
+        })
+
+        // // Create the feedback branch if it doesn't exist
+        // try {
+        //     await octokit.rest.git.createRef({
+        //         owner,
+        //         repo,
+        //         ref: 'refs/heads/feedback',
+        //         sha: 'main'
+        //     });
+        // } catch (error) {
+        //     core.setFailed("Failed to create branch: " + error.message);
+        // }
+
+
+        // const { data: newPR } = await octokit.rest.pulls.create({
+        //     owner,
+        //     repo,
+        //     title: 'Feedback',
+        //     head: 'feedback',
+        //     base: 'main',
+        //     body: 'This pull request is a place for you and your teacher to discuss your code. **Do not close or merge this pull request.**',
+        // });
 
         feedbackPR = newPR;
     }
 
     // Get the id
-    const feedbackPRNumber = feedbackPR.number;
+    // const feedbackPRNumber = feedbackPR.number;
 
     try {
         await octokit.rest.issues.createComment({
             owner,
             repo,
-            issue_number: feedbackPRNumber,
+            issue_number: feedbackNumber,
             body: markdownText,
             title: "Autograding Feedback: " + new Date().toLocaleString()
         });
