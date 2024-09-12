@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const { getTestScore, getMaxScoreForTest } = require('./helpers/test-helpers')
+import { request } from '@octokit/request';
 
 exports.SendFeedback = async function SendFeedback(runnerResults) {
 
@@ -93,82 +94,35 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
         return;
     }
 
-    // Get all PRs and find the first with title "Feedback"
-    const { data: pullRequests } = await octokit.rest.pulls.list({
-        owner,
-        repo
+    // Check if there is an issue #1. 99% of the time that'll be the feedback
+    // PR, assuming that GH Classroom set it up. If not, we'll just make an 
+    // issue and use that. 
+    let issueNumber = 1;
+    const firstIssue = await octokit.rest.issues.get({
+        owner: owner,
+        repo: repo,
+        issue_number: issueNumber,
     });
 
-    let feedbackPR = null;
-    let feedbackNumber = 0;
-    for (let i = 0; i < pullRequests.length; i++) {
-        const pr = pullRequests[i];
-        if (pr.title === "Feedback") {
-            feedbackPR = pr;
-            feedbackNumber = pr.number;
-            break;
-        }
-    }
+    // If it's a 404, then the issue doesn't exist and we need to 
+    // create it.
 
-    if (!feedbackPR) {
-        // Create the PR and get the id
-
-
-        // await octokit.createPullRequest({
-        //     owner: owner,
-        //     repo: repo,
-        //     title: 'Feedback',
-        //     body: 'This pull request is a place for you and your teacher to discuss your code. **Do not close or merge this pull request.**',
-        //     head: 'feedback',
-        //     base: 'main',
-        //     update: true,
-        //     forceFork: true,
-
-        // }).then(pr => {
-        //     feedbackPR = pr;
-        //     feedbackNumber = pr.data.number;
-        // })
-
-        // Get the sha of the first commit in this repository
-        const { data: firstCommit } = await octokit.rest.repos.getCommit({
-            owner,
-            repo,
-            ref: 'main'
-        });
-
-        // // Create the feedback branch if it doesn't exist
-        try {
-            await octokit.rest.git.createRef({
-                owner,
-                repo,
-                ref: 'refs/heads/feedback',
-                sha: firstCommit.sha
-            });
-        } catch (error) {
-            core.setFailed("Failed to create branch: " + error.message);
-        }
-
-        const { data: newPR } = await octokit.rest.pulls.create({
-            owner,
-            repo,
+    if (firstIssue.status === 404) {
+        // Create the issue
+        let newIssue = await octokit.rest.issues.create({
+            owner: owner,
+            repo: repo,
             title: 'Feedback',
-            head: 'feedback',
-            base: 'main',
-            body: 'This pull request is a place for you and your teacher to discuss your code. **Do not close or merge this pull request.**',
-
+            body: 'This issue is a place for you and your teacher to discuss your code. **Do not close or merge this issue.**'
         });
 
-        feedbackPR = newPR;
+        issueNumber = newIssue.data.number;
     }
-
-    // Get the id
-    // const feedbackPRNumber = feedbackPR.number;
-
     try {
         await octokit.rest.issues.createComment({
             owner,
             repo,
-            issue_number: feedbackNumber,
+            issue_number: issueNumber,
             body: markdownText,
             title: "Autograding Feedback: " + new Date().toLocaleString()
         });
