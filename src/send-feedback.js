@@ -21,7 +21,9 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
 
     runnerResults.forEach(({ runner, results }) => {
         if (results.markdown && results.markdown.length > 0) {
-            markdownList.push(results.markdown);
+            // Have to base64 decode the results
+            let decoded = Buffer.from(results.markdown, 'base64').toString('utf-8');
+            markdownList.push(decoded);
         }
     });
 
