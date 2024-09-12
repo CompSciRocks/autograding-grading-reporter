@@ -98,24 +98,19 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
     // PR, assuming that GH Classroom set it up. If not, we'll just make an 
     // issue and use that. 
     let issueNumber = 1;
-    const firstIssue = await octokit.rest.issues.get({
-        owner: owner,
-        repo: repo,
-        issue_number: issueNumber,
-    });
-
-    // If it's a 404, then the issue doesn't exist and we need to 
-    // create it.
-
-    if (firstIssue.status === 404) {
-        // Create the issue
+    try {
+        const firstIssue = await octokit.rest.issues.get({
+            owner: owner,
+            repo: repo,
+            issue_number: issueNumber,
+        });
+    } catch (error) {
         let newIssue = await octokit.rest.issues.create({
             owner: owner,
             repo: repo,
             title: 'Feedback',
             body: 'This issue is a place for you and your teacher to discuss your code. **Do not close or merge this issue.**'
         });
-
         issueNumber = newIssue.data.number;
     }
     try {
