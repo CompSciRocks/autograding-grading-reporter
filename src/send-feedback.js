@@ -135,7 +135,7 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
                 owner,
                 repo,
                 ref: 'refs/heads/feedback',
-                sha: env.GITHUB_SHA
+                sha: process.env.GITHUB_SHA
             });
         } catch (error) {
             core.setFailed("Failed to create branch: " + error.message);
