@@ -47,6 +47,9 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
         });
     });
 
+    if (isNaN(score)) { score = 0; }
+    if (isNaN(maxScore)) { maxScore = 0; }
+
     let markdownText = '';
 
     markdownText = `# Feedback from autograding\n\n`;
@@ -110,7 +113,7 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
             owner: owner,
             repo: repo,
             title: 'Feedback',
-            body: 'This issue is a place for you and your teacher to discuss your code. **Do not close or merge this issue.**'
+            body: 'This issue is a place for you to see the run results of your code and for you and your teacher to discuss your code. **Do not close or merge this issue.** It must stay open for this to work. '
         });
         issueNumber = newIssue.data.number;
     }
