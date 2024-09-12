@@ -129,18 +129,24 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
         //     feedbackNumber = pr.data.number;
         // })
 
+        // Get the sha of the first commit in this repository
+        const { data: firstCommit } = await octokit.rest.repos.getCommit({
+            owner,
+            repo,
+            ref: 'main'
+        });
+
         // // Create the feedback branch if it doesn't exist
         try {
             await octokit.rest.git.createRef({
                 owner,
                 repo,
                 ref: 'refs/heads/feedback',
-                sha: process.env.GITHUB_SHA
+                sha: firstCommit.sha
             });
         } catch (error) {
             core.setFailed("Failed to create branch: " + error.message);
         }
-
 
         const { data: newPR } = await octokit.rest.pulls.create({
             owner,
