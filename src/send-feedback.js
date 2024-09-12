@@ -111,6 +111,19 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
 
     if (!feedbackPR) {
         // Create the PR and get the id
+
+        // Create the feedback branch if it doesn't exist
+        try {
+            await octokit.rest.git.createRef({
+                owner,
+                repo,
+                ref: 'refs/heads/feedback',
+                sha: 'main'
+            });
+        } catch (error) {
+            core.setFailed("Failed to create branch: " + error.message);
+        }
+
         const { data: newPR } = await octokit.rest.pulls.create({
             owner,
             repo,
