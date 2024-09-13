@@ -11,6 +11,9 @@ inputs:
   runners:
     description: "Comma-separated list of step ids"
     required: true
+  send_feedback:
+    description: "Whether feedback is provided to students on their feedback PR - Can be always, never, or when_availble"
+    default: "always"
 runs:
   using: "node20"
   main: "dist/main.js"
