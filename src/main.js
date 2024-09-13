@@ -44,7 +44,7 @@ try {
 
 } catch (error) {
   const input = core.getInput("runners");
-  const pattern = /^([a-zA-Z0-9]+,)*[a-zA-Z0-9]+$/
+  const pattern = /^([a-zA-Z0-9-]+,)*[a-zA-Z0-9-]+$/
   if (!pattern.test(input)) {
     console.error("The runners input must be a comma-separated list of strings.");
     core.setFailed("The runners input must be a comma-separated list of strings.");
