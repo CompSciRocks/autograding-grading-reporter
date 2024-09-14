@@ -1,7 +1,6 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const { getTestScore, getMaxScoreForTest } = require('./helpers/test-helpers')
-const { getTotalMaxScore, getTestWeight, getTestScore, totalPercentageReducer, getMaxScoreForTest } = require("./helpers/test-helpers");
 
 exports.SendFeedback = async function SendFeedback(runnerResults) {
 
