@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const { getTestScore, getMaxScoreForTest } = require('./helpers/test-helpers')
-import { request } from '@octokit/request';
+const { getTotalMaxScore, getTestWeight, getTestScore, totalPercentageReducer, getMaxScoreForTest } = require("./helpers/test-helpers");
 
 exports.SendFeedback = async function SendFeedback(runnerResults) {
 
@@ -67,6 +67,28 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
             markdownText += '![](https://img.shields.io/badge/grading-' + score + '/' + maxScore + '-yellow)\n\n';
         }
     }
+
+    // Add aggregate table. This is similar to the one in the console output, but formatted
+    // for markdown to put into feedback. 
+    markdownText += '**Summary**\n';
+    markdownText += '| Test Name | Test Score | Max Score |\n';
+    markdownText += '| --- | --- | --- |\n';
+
+    let totalScore = 0;
+    let totalMaxScore = 0;
+
+    runnerResults.forEach(({ runner, results }) => {
+        const maxScore = getMaxScoreForTest(results);
+        const score = getTestScore(results);
+        markdownText += `| ${runner} | ${score.toFixed(2)} | ${maxScore} |\n`;
+
+        totalScore += score;
+        totalMaxScore += maxScore;
+    });
+
+    markdownText += `| Total: | ${totalScore.toFixed(2)} | ${totalMaxScore} |\n\n`;
+
+
 
     if (markdownList.length > 0) {
         markdownText += markdownList.join('\n\n');
