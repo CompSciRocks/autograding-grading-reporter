@@ -69,7 +69,11 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
   // the title and summary to be overwritten by GitHub Actions (they are required in this call)
   // We'll also store the total in an annotation to future-proof
 
-  const text = `Points ${(isNaN(totalPoints) ? 0 : totalPoints)}/${(isNaN(maxPoints) ? 0 : maxPoints)}`;
+  // They're constants, so just making a throw away variable because it's used twice
+  let tPoints = isNaN(totalPoints) ? 0 : totalPoints;
+  let mPoints = isNaN(maxPoints) ? 0 : maxPoints; 
+
+  const text = `Points ${tPoints}/${mPoints}`;
   await octokit.rest.checks.update({
     owner,
     repo,
@@ -77,7 +81,7 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
     output: {
       title: "Autograding",
       summary: text,
-      text: JSON.stringify({ totalPoints, maxPoints }),
+      text: JSON.stringify({ tPoints, mPoints }),
       annotations: [
         {
           // Using the `.github` path is what GitHub Actions does
