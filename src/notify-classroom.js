@@ -68,10 +68,8 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
   // Update the checkrun, we'll assign the title, summary and text even though we expect
   // the title and summary to be overwritten by GitHub Actions (they are required in this call)
   // We'll also store the total in an annotation to future-proof
-  totalPoints = isNaN(totalPoints) ? 0 : totalPoints;
-  maxPoints = isNaN(maxPoints) ? 0 : maxPoints;
 
-  const text = `Points ${totalPoints}/${maxPoints}`;
+  const text = `Points ${(isNaN(totalPoints) ? 0 : totalPoints)}/${(isNaN(maxPoints) ? 0 : maxPoints)}`;
   await octokit.rest.checks.update({
     owner,
     repo,
