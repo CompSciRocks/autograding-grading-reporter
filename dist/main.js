@@ -87,7 +87,7 @@ ${E.test_code}
 `,n+=`| Test Name | Test Score | Max Score |
 `,n+=`| --- | --- | --- |
 `;let i=0,a=0;e.forEach(({runner:h,results:B})=>{let I=UM(B),d=NM(B),w=h;try{w=B.tests[0].name}catch{}n+=`| ${w} | ${d.toFixed(2)} | ${I} |
-`,i+=d,a+=I}),n+=`| Total: | ${i.toFixed(2)} | ${a} |
+`,i+=d,a+=I}),n+=`| **Total:** | **${i.toFixed(2)}** | **${a}** |
 
 `,r.length>0&&(n+=r.join(`
 
