@@ -91,7 +91,7 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
         totalMaxScore += maxScore;
     });
 
-    markdownText += `| Total: | ${totalScore.toFixed(2)} | ${totalMaxScore} |\n\n`;
+    markdownText += `| **Total:** | **${totalScore.toFixed(2)}** | **${totalMaxScore}** |\n\n`;
 
 
 
