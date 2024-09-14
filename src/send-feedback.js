@@ -79,7 +79,13 @@ exports.SendFeedback = async function SendFeedback(runnerResults) {
     runnerResults.forEach(({ runner, results }) => {
         const maxScore = getMaxScoreForTest(results);
         const score = getTestScore(results);
-        markdownText += `| ${runner} | ${score.toFixed(2)} | ${maxScore} |\n`;
+
+        let testName = runner;
+        try {
+            testName = results.tests[0].name;
+        } catch (error) { }
+
+        markdownText += `| ${testName} | ${score.toFixed(2)} | ${maxScore} |\n`;
 
         totalScore += score;
         totalMaxScore += maxScore;
