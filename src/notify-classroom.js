@@ -70,10 +70,12 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
   // We'll also store the total in an annotation to future-proof
 
   // They're constants, so just making a throw away variable because it's used twice
+  // @todo This was returning 0/0 on everything, need to figure out why, but for no
+  // NaN is bet
   let tPoints = isNaN(totalPoints) ? 0 : totalPoints;
-  let mPoints = isNaN(maxPoints) ? 0 : maxPoints; 
+  let mPoints = isNaN(maxPoints) ? 0 : maxPoints;
 
-  const text = `Points ${tPoints}/${mPoints}`;
+  const text = `Points ${totalPoints}/${maxPoints}`;
   await octokit.rest.checks.update({
     owner,
     repo,
@@ -81,7 +83,7 @@ exports.NotifyClassroom = async function NotifyClassroom(runnerResults) {
     output: {
       title: "Autograding",
       summary: text,
-      text: JSON.stringify({ tPoints, mPoints }),
+      text: JSON.stringify({ totalPoints, maxPoints }),
       annotations: [
         {
           // Using the `.github` path is what GitHub Actions does
