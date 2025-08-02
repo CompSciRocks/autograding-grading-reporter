@@ -1,13 +1,11 @@
 ## GitHub Classroom Autograding Reporter
 
 ### Overview
-**GitHub Classroom Autograding Reporter** is a plugin for GitHub Classroom's Autograder. Use it to report the results of the test execution to students and GitHub Classroom.
 
-### Key Features
-- **Automatic Grading**: Test student code submissions and provide immediate feedback.
-- **Customizable Test Setup**: Define pre-test setup commands and specific testing commands.
-- **Flexible Output Comparison**: Supports multiple methods to compare the stdout output.
-- **Timeout Control**: Limit the runtime of tests to prevent excessive resource usage.
+This is a tweaked version of the default GitHub Classroom autograding reporter that sends feedback to the student as markdown in either a feedback PR or issue. 
+
+> [!NOTE}
+> Since this creates issues or pull requests it does take updating the `permissions` field from the defaults. 
 
 ### Environment Variables
 
@@ -33,7 +31,9 @@ on:
 permissions:
   checks: write
   actions: read
-  contents: read
+  contents: write
+  issues: write
+  pull-requests: write
 jobs:
   autograding:
     runs-on: ubuntu-latest
@@ -77,58 +77,5 @@ jobs:
           PYTHON-TEST-WITH-SCORE_RESULTS: "${{steps.python-test-with-score.outputs.result}}"
         with:
           runners: shout-test,a-command-test,python-test,python-test-with-score
-```
-
-### Example Output
-```
-🔄 Processing: shout-test
-✅ Shout Test
-Test code:
-./test/bin/shout.sh <stdin>hello
-
-Total points for shout-test: 10.00/10
-
-🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
-
-🔄 Processing: a-command-test
-✅ A command test
-Test code:
-rspec hello_spec.rb
-
-Total points for a-command-test: 20.00/20
-
-🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
-
-🔄 Processing: python-test
-✅ test sample - line 4
-Test code:
-collection = [1, 2, 3, 4, 5]
-assert sample_from_collection(collection) in collection
-
-🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
-
-🔄 Processing: python-test-with-score
-✅ test sample - line 4
-Test code:
-collection = [1, 2, 3, 4, 5]
-assert sample_from_collection(collection) in collection
-
-Total points for python-test-with-score: 30.00/30
-
-Test runner summary
-┌────────────────────┬─────────────┬─────────────┐
-│ Test Runner Name   │ Test Score  │ Max Score   │
-├────────────────────┼─────────────┼─────────────┤
-│ shout-test         │ 10          │ 10          │
-├────────────────────┼─────────────┼─────────────┤
-│ a-command-test     │ 20          │ 20          │
-├────────────────────┼─────────────┼─────────────┤
-│ python-test        │ 0           │ 0           │
-├────────────────────┼─────────────┼─────────────┤
-│ python-test-with-… │ 30          │ 30          │
-├────────────────────┼─────────────┼─────────────┤
-│ Total:             │ 60          │ 60          │
-└────────────────────┴─────────────┴─────────────┘
-🏆 Grand total tests passed: 4/4
 ```
 
