@@ -4,7 +4,7 @@
 
 This is a tweaked version of the default GitHub Classroom autograding reporter that sends feedback to the student as markdown in either a feedback PR or issue. 
 
-> [!NOTE}
+> [!NOTE]
 > Since this creates issues or pull requests it does take updating the `permissions` field from the defaults. 
 
 ### Environment Variables
